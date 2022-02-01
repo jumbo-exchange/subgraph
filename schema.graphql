@@ -1,0 +1,31 @@
+type Account @entity {
+  id: ID!
+  signerId: String!
+  blockTimestamp: BigInt
+  swap: [Swap!]!
+  liquidity: [AddLiquidity!]!
+}
+
+type Swap @entity {
+  id: ID!
+  output: String
+  action: String
+  blockTimestamp: BigInt
+  firstTokenAmount: BigInt
+  firstToken: String
+  secondTokenAmount: BigInt
+  secondToken: String
+}
+
+type AddLiquidity @entity {
+  id: ID!
+  output: String
+  blockTimestamp: BigInt
+  functionCalled: String
+  functionAction: String
+  firstPoolAmount: BigInt
+  firstPool: String
+  secondPoolAmount: BigInt
+  secondPool: String
+  sharesMinted: BigInt
+}
