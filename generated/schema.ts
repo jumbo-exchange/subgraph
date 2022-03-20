@@ -27,8 +27,7 @@ export class Account extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save Account entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type Account must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("Account", id.toString(), this);
     }
@@ -104,8 +103,7 @@ export class Swap extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save Swap entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type Swap must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("Swap", id.toString(), this);
     }
@@ -141,20 +139,20 @@ export class Swap extends Entity {
     }
   }
 
-  get action(): string | null {
-    let value = this.get("action");
+  get poolId(): BigInt | null {
+    let value = this.get("poolId");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBigInt();
     }
   }
 
-  set action(value: string | null) {
+  set poolId(value: BigInt | null) {
     if (!value) {
-      this.unset("action");
+      this.unset("poolId");
     } else {
-      this.set("action", Value.fromString(<string>value));
+      this.set("poolId", Value.fromBigInt(<BigInt>value));
     }
   }
 
@@ -175,8 +173,8 @@ export class Swap extends Entity {
     }
   }
 
-  get firstTokenAmount(): BigInt | null {
-    let value = this.get("firstTokenAmount");
+  get tokenInAmount(): BigInt | null {
+    let value = this.get("tokenInAmount");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -184,16 +182,16 @@ export class Swap extends Entity {
     }
   }
 
-  set firstTokenAmount(value: BigInt | null) {
+  set tokenInAmount(value: BigInt | null) {
     if (!value) {
-      this.unset("firstTokenAmount");
+      this.unset("tokenInAmount");
     } else {
-      this.set("firstTokenAmount", Value.fromBigInt(<BigInt>value));
+      this.set("tokenInAmount", Value.fromBigInt(<BigInt>value));
     }
   }
 
-  get firstToken(): string | null {
-    let value = this.get("firstToken");
+  get tokenIn(): string | null {
+    let value = this.get("tokenIn");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -201,16 +199,16 @@ export class Swap extends Entity {
     }
   }
 
-  set firstToken(value: string | null) {
+  set tokenIn(value: string | null) {
     if (!value) {
-      this.unset("firstToken");
+      this.unset("tokenIn");
     } else {
-      this.set("firstToken", Value.fromString(<string>value));
+      this.set("tokenIn", Value.fromString(<string>value));
     }
   }
 
-  get secondTokenAmount(): BigInt | null {
-    let value = this.get("secondTokenAmount");
+  get tokenOutAmount(): BigInt | null {
+    let value = this.get("tokenOutAmount");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -218,16 +216,16 @@ export class Swap extends Entity {
     }
   }
 
-  set secondTokenAmount(value: BigInt | null) {
+  set tokenOutAmount(value: BigInt | null) {
     if (!value) {
-      this.unset("secondTokenAmount");
+      this.unset("tokenOutAmount");
     } else {
-      this.set("secondTokenAmount", Value.fromBigInt(<BigInt>value));
+      this.set("tokenOutAmount", Value.fromBigInt(<BigInt>value));
     }
   }
 
-  get secondToken(): string | null {
-    let value = this.get("secondToken");
+  get tokenOut(): string | null {
+    let value = this.get("tokenOut");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -235,11 +233,132 @@ export class Swap extends Entity {
     }
   }
 
-  set secondToken(value: string | null) {
+  set tokenOut(value: string | null) {
     if (!value) {
-      this.unset("secondToken");
+      this.unset("tokenOut");
     } else {
-      this.set("secondToken", Value.fromString(<string>value));
+      this.set("tokenOut", Value.fromString(<string>value));
+    }
+  }
+
+  get receiptId(): string | null {
+    let value = this.get("receiptId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set receiptId(value: string | null) {
+    if (!value) {
+      this.unset("receiptId");
+    } else {
+      this.set("receiptId", Value.fromString(<string>value));
+    }
+  }
+}
+
+export class Pool extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("swapsFirst", Value.fromStringArray(new Array(0)));
+    this.set("swapsSecond", Value.fromStringArray(new Array(0)));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Pool entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Pool must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Pool", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Pool | null {
+    return changetype<Pool | null>(store.get("Pool", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get tokenFirst(): string | null {
+    let value = this.get("tokenFirst");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set tokenFirst(value: string | null) {
+    if (!value) {
+      this.unset("tokenFirst");
+    } else {
+      this.set("tokenFirst", Value.fromString(<string>value));
+    }
+  }
+
+  get tokenSecond(): string | null {
+    let value = this.get("tokenSecond");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set tokenSecond(value: string | null) {
+    if (!value) {
+      this.unset("tokenSecond");
+    } else {
+      this.set("tokenSecond", Value.fromString(<string>value));
+    }
+  }
+
+  get swapsFirst(): Array<string> {
+    let value = this.get("swapsFirst");
+    return value!.toStringArray();
+  }
+
+  set swapsFirst(value: Array<string>) {
+    this.set("swapsFirst", Value.fromStringArray(value));
+  }
+
+  get swapsSecond(): Array<string> {
+    let value = this.get("swapsSecond");
+    return value!.toStringArray();
+  }
+
+  set swapsSecond(value: Array<string>) {
+    this.set("swapsSecond", Value.fromStringArray(value));
+  }
+
+  get fee(): string | null {
+    let value = this.get("fee");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set fee(value: string | null) {
+    if (!value) {
+      this.unset("fee");
+    } else {
+      this.set("fee", Value.fromString(<string>value));
     }
   }
 }
@@ -256,8 +375,7 @@ export class AddLiquidity extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save AddLiquidity entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type AddLiquidity must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("AddLiquidity", id.toString(), this);
     }
@@ -290,6 +408,23 @@ export class AddLiquidity extends Entity {
       this.unset("output");
     } else {
       this.set("output", Value.fromString(<string>value));
+    }
+  }
+
+  get receiptId(): string | null {
+    let value = this.get("receiptId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set receiptId(value: string | null) {
+    if (!value) {
+      this.unset("receiptId");
+    } else {
+      this.set("receiptId", Value.fromString(<string>value));
     }
   }
 

@@ -1,3 +1,7 @@
-# Example Subgraph
+# Jumbo Subgraph
 
-An example to help you get started with The Graph. For more information see the docs on https://thegraph.com/docs/.
+```
+export const NAME=jumbo-exchange/subgraph-v1
+export const NAME=jumbo-exchange/testnet-subgraph-v1
+yarn deploy
+```

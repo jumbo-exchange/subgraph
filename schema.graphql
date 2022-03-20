@@ -9,17 +9,28 @@ type Account @entity {
 type Swap @entity {
   id: ID!
   output: String
-  action: String
+  poolId: BigInt
   blockTimestamp: BigInt
-  firstTokenAmount: BigInt
-  firstToken: String
-  secondTokenAmount: BigInt
-  secondToken: String
+  tokenInAmount: BigInt
+  tokenIn: String
+  tokenOutAmount: BigInt
+  tokenOut: String
+  receiptId: String
+}
+
+type Pool @entity {
+  id: ID!
+  tokenFirst: String
+  tokenSecond: String
+  swapsFirst: [Swap!]!
+  swapsSecond: [Swap!]!
+  fee: String
 }
 
 type AddLiquidity @entity {
   id: ID!
   output: String
+  receiptId: String
   blockTimestamp: BigInt
   functionCalled: String
   functionAction: String
