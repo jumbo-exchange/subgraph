@@ -23,8 +23,14 @@ type Pool @entity {
   tokenFirst: String
   tokenSecond: String
   swapsFirst: [Swap!]!
+  swaps24First: [Swap!]!
   swapsSecond: [Swap!]!
+  swaps24Second: [Swap!]!
+  firstTokenVolume: BigInt
+  secondTokenVolume: BigInt
   fee: String
+  poolId: String
+  receiptId: String
 }
 
 type AddLiquidity @entity {

@@ -2,7 +2,7 @@ import { BigInt, near, log } from "@graphprotocol/graph-ts";
 import { Account, Swap } from "../../generated/schema";
 import { replaceAllOccurrences } from "../utils/replacer";
 import { JSON } from "assemblyscript-json"; 
-
+import { addSwap } from './pool';
 
 
 export default function swap(
@@ -77,7 +77,6 @@ function saveSwap(
   tokenOutAmount: string,
   blockTimestamp: BigInt,
   poolId: string
-
 ): void {
   const swap = new Swap(receipt_id);
 
@@ -89,4 +88,5 @@ function saveSwap(
   swap.poolId = BigInt.fromString(poolId);
 
   swap.save();
+  addSwap(receipt_id, tokenIn, tokenInAmount, poolId);
 }

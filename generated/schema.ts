@@ -265,7 +265,9 @@ export class Pool extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("swapsFirst", Value.fromStringArray(new Array(0)));
+    this.set("swaps24First", Value.fromStringArray(new Array(0)));
     this.set("swapsSecond", Value.fromStringArray(new Array(0)));
+    this.set("swaps24Second", Value.fromStringArray(new Array(0)));
   }
 
   save(): void {
@@ -336,6 +338,15 @@ export class Pool extends Entity {
     this.set("swapsFirst", Value.fromStringArray(value));
   }
 
+  get swaps24First(): Array<string> {
+    let value = this.get("swaps24First");
+    return value!.toStringArray();
+  }
+
+  set swaps24First(value: Array<string>) {
+    this.set("swaps24First", Value.fromStringArray(value));
+  }
+
   get swapsSecond(): Array<string> {
     let value = this.get("swapsSecond");
     return value!.toStringArray();
@@ -343,6 +354,49 @@ export class Pool extends Entity {
 
   set swapsSecond(value: Array<string>) {
     this.set("swapsSecond", Value.fromStringArray(value));
+  }
+
+  get swaps24Second(): Array<string> {
+    let value = this.get("swaps24Second");
+    return value!.toStringArray();
+  }
+
+  set swaps24Second(value: Array<string>) {
+    this.set("swaps24Second", Value.fromStringArray(value));
+  }
+
+  get firstTokenVolume(): BigInt | null {
+    let value = this.get("firstTokenVolume");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set firstTokenVolume(value: BigInt | null) {
+    if (!value) {
+      this.unset("firstTokenVolume");
+    } else {
+      this.set("firstTokenVolume", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get secondTokenVolume(): BigInt | null {
+    let value = this.get("secondTokenVolume");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set secondTokenVolume(value: BigInt | null) {
+    if (!value) {
+      this.unset("secondTokenVolume");
+    } else {
+      this.set("secondTokenVolume", Value.fromBigInt(<BigInt>value));
+    }
   }
 
   get fee(): string | null {
@@ -359,6 +413,40 @@ export class Pool extends Entity {
       this.unset("fee");
     } else {
       this.set("fee", Value.fromString(<string>value));
+    }
+  }
+
+  get poolId(): string | null {
+    let value = this.get("poolId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set poolId(value: string | null) {
+    if (!value) {
+      this.unset("poolId");
+    } else {
+      this.set("poolId", Value.fromString(<string>value));
+    }
+  }
+
+  get receiptId(): string | null {
+    let value = this.get("receiptId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set receiptId(value: string | null) {
+    if (!value) {
+      this.unset("receiptId");
+    } else {
+      this.set("receiptId", Value.fromString(<string>value));
     }
   }
 }

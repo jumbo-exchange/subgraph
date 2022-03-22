@@ -17,14 +17,12 @@ export function handleEvent(
   const functionCall = action.toFunctionCall();
       
   if (functionCall.methodName == "callback_ft_on_transfer") {
-    log.error("callback_ft_on_transfer: {}", [outcome.logs.join("\n")]);
     swap(functionCall, receipt, blockHeader, outcome);
     return;
   }
 
   if(functionCall.methodName =='add_simple_pool') {
-    log.error("add_simple_pool: {}", [outcome.logs.join("\n")]);
-    pool(functionCall, receipt, blockHeader);
+    pool(functionCall, receipt, outcome);
     return;
   }
 }
