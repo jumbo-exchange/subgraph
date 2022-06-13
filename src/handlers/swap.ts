@@ -44,11 +44,11 @@ export default function swap(
              const swapLog = outcome.logs[k];
              const swapLogArray = swapLog.split(' ');
              if(swapLog.startsWith('Admin')) return;
-             
-             log.error("ft_on_transfer TEST_ACTION: {} ", [swapParsed.toString()]);
+
+             log.debug("ft_on_transfer: {} ", [swapParsed.toString()]);
              
              if(pool_id == null) return;
-             log.error("ft_on_transfer TEST_ACTION: pool_id {} ", [pool_id.toString()]);
+             log.debug("ft_on_transfer: pool_id {} ", [pool_id.toString()]);
 
             if(swapLog == '') return;
       
@@ -69,7 +69,7 @@ export default function swap(
             date.setUTCSeconds(0);
             date.setUTCMinutes(0);
             const hourId = date.toISOString()
-            log.debug("THIS IS DATE {}", [hourId]);
+            log.debug("AnHour id {}", [hourId]);
             let anHour = AnHour.load(hourId);
 
             if(!anHour) {

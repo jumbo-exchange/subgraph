@@ -73,14 +73,14 @@ export function addSwap(
     if(!pool.swapsFirst || !pool.swapsSecond) return;
 
     if(firstToken === null || secondToken === null || firstTokenVolume === null || secondTokenVolume === null) return
-    log.error("addSwap0: {} {} {}", [ tokenIn, firstToken, secondToken]);
+    log.error("addSwap: {} {} {}", [ tokenIn, firstToken, secondToken]);
     if(tokenIn == firstToken){
       pool.swapsFirst = pool.swapsFirst.concat([receipt_id])
-      log.error("addSwap1: {} {}", [ tokenIn, BigInt.fromString(tokenInAmount).toString()]);
+      log.error("add swap first token: {} {}", [ tokenIn, BigInt.fromString(tokenInAmount).toString()]);
       pool.firstTokenVolume = firstTokenVolume.plus(BigInt.fromString(tokenInAmount)) 
     } else {
       pool.swapsSecond = pool.swapsSecond.concat([receipt_id])
-      log.error("addSwap2: {} {}", [ tokenIn, BigInt.fromString(tokenInAmount).toString()]);
+      log.error("add swap second token: {} {}", [ tokenIn, BigInt.fromString(tokenInAmount).toString()]);
       pool.secondTokenVolume = secondTokenVolume.plus(BigInt.fromString(tokenInAmount)) 
     }
 
