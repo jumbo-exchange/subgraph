@@ -17,12 +17,18 @@ export function handleEvent(
   const functionCall = action.toFunctionCall();
       
   if (functionCall.methodName == "callback_ft_on_transfer") {
+    log.info("swap: {}", ["callback_ft_on_transfer"]);
     swap(functionCall, receipt, blockHeader, outcome);
     return;
   }
 
   if(functionCall.methodName =='add_simple_pool') {
-    pool(functionCall, receipt, outcome);
+    pool(functionCall, receipt, outcome, "SIMPLE");
+    return;
+  }
+
+  if(functionCall.methodName =='add_stable_swap_pool') {
+    pool(functionCall, receipt, outcome, "STABLE");
     return;
   }
 }

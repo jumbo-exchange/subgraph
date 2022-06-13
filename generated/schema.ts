@@ -257,6 +257,23 @@ export class Swap extends Entity {
       this.set("receiptId", Value.fromString(<string>value));
     }
   }
+
+  get predecessorId(): string | null {
+    let value = this.get("predecessorId");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set predecessorId(value: string | null) {
+    if (!value) {
+      this.unset("predecessorId");
+    } else {
+      this.set("predecessorId", Value.fromString(<string>value));
+    }
+  }
 }
 
 export class Pool extends Entity {
@@ -447,6 +464,23 @@ export class Pool extends Entity {
       this.unset("receiptId");
     } else {
       this.set("receiptId", Value.fromString(<string>value));
+    }
+  }
+
+  get poolType(): string | null {
+    let value = this.get("poolType");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set poolType(value: string | null) {
+    if (!value) {
+      this.unset("poolType");
+    } else {
+      this.set("poolType", Value.fromString(<string>value));
     }
   }
 }
@@ -650,5 +684,65 @@ export class AddLiquidity extends Entity {
     } else {
       this.set("sharesMinted", Value.fromBigInt(<BigInt>value));
     }
+  }
+}
+
+export class AnHour extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("swapsForHour", Value.fromStringArray(new Array(0)));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save AnHour entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type AnHour must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("AnHour", id.toString(), this);
+    }
+  }
+
+  static load(id: string): AnHour | null {
+    return changetype<AnHour | null>(store.get("AnHour", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get blockTimestamp(): BigInt | null {
+    let value = this.get("blockTimestamp");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set blockTimestamp(value: BigInt | null) {
+    if (!value) {
+      this.unset("blockTimestamp");
+    } else {
+      this.set("blockTimestamp", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get swapsForHour(): Array<string> {
+    let value = this.get("swapsForHour");
+    return value!.toStringArray();
+  }
+
+  set swapsForHour(value: Array<string>) {
+    this.set("swapsForHour", Value.fromStringArray(value));
   }
 }

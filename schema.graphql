@@ -16,6 +16,7 @@ type Swap @entity {
   tokenOutAmount: BigInt
   tokenOut: String
   receiptId: String
+  predecessorId: String
 }
 
 type Pool @entity {
@@ -31,6 +32,7 @@ type Pool @entity {
   fee: String
   poolId: String
   receiptId: String
+  poolType: String
 }
 
 type AddLiquidity @entity {
@@ -45,4 +47,10 @@ type AddLiquidity @entity {
   secondPoolAmount: BigInt
   secondPool: String
   sharesMinted: BigInt
+}
+
+type AnHour @entity { 
+  id: ID!
+  blockTimestamp: BigInt
+  swapsForHour: [Swap!]!
 }

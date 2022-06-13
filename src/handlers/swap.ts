@@ -1,9 +1,10 @@
 import { BigInt, near, log } from "@graphprotocol/graph-ts";
-import { Account, Swap } from "../../generated/schema";
+import { Account, AnHour, Swap } from "../../generated/schema";
 import { replaceAllOccurrences } from "../utils/replacer";
 import { JSON } from "assemblyscript-json"; 
 import { addSwap } from './pool';
 
+const secondsToMilliseconds = BigInt.fromI32(1000);
 
 export default function swap(
   functionCall: near.FunctionCallAction,
@@ -12,9 +13,9 @@ export default function swap(
   outcome: near.ExecutionOutcome
 ): void {
 
-  let account = Account.load(receipt.predecessorId);
+  let account = Account.load(receipt.signerId);
 
-  if(!account) account = new Account(receipt.predecessorId);
+  if(!account) account = new Account(receipt.signerId);
 
     const receiptId = receipt.id.toBase58();
     account.signerId = receipt.signerId;
@@ -42,6 +43,8 @@ export default function swap(
              
              const swapLog = outcome.logs[k];
              const swapLogArray = swapLog.split(' ');
+             if(swapLog.startsWith('Admin')) return;
+             
              log.error("ft_on_transfer TEST_ACTION: {} ", [swapParsed.toString()]);
              
              if(pool_id == null) return;
@@ -56,13 +59,32 @@ export default function swap(
               swapLogArray[1],
               swapLogArray[4],
               blockTimestamp,
-              pool_id.toString()
+              pool_id.toString(),
+              receipt.signerId
             )
+            account.swap = account.swap.concat([receiptId + ' ' + pool_id.toString()])
+            const blockTimestampI64: i64 = blockTimestamp.times(secondsToMilliseconds).toI64();
+            const date = new Date(blockTimestampI64);
+            date.setUTCMilliseconds(0);
+            date.setUTCSeconds(0);
+            date.setUTCMinutes(0);
+            const hourId = date.toISOString()
+            log.debug("THIS IS DATE {}", [hourId]);
+            let anHour = AnHour.load(hourId);
+
+            if(!anHour) {
+              anHour = new AnHour(hourId)
+              anHour.blockTimestamp = blockTimestamp;
+              anHour.swapsForHour = [];
+            };
+
+            anHour.swapsForHour =  anHour.swapsForHour.concat([receiptId + ' ' + pool_id.toString()]);
+            anHour.save()
            }
           };
         }
       }
-      if(msgObject!=null && msgObject.toString() == ""){
+      if(msgObject != null && msgObject.toString() == ""){
         log.debug("ft_transfer with empty message", []);
       }
     }
@@ -76,7 +98,8 @@ function saveSwap(
   tokenInAmount: string,
   tokenOutAmount: string,
   blockTimestamp: BigInt,
-  poolId: string
+  poolId: string,
+  predecessorId: string
 ): void {
   const swap = new Swap(receipt_id);
 
@@ -86,7 +109,9 @@ function saveSwap(
   swap.tokenOutAmount = BigInt.fromString(tokenOutAmount);
   swap.blockTimestamp =  blockTimestamp;
   swap.poolId = BigInt.fromString(poolId);
-
+  swap.predecessorId = predecessorId;
   swap.save();
+
+
   addSwap(receipt_id, tokenIn, tokenInAmount, poolId);
 }
