@@ -37,49 +37,49 @@ export default function swap(
           if(actionsArray.isArr) {
            const length = actionsParsed._arr.length;
            for(let k = 0; k < length; k++) {
-             const swap = actionsParsed._arr[k];
-             const swapParsed: JSON.Obj = <JSON.Obj>JSON.parse(swap.toString());
-             const pool_id = swapParsed.getValue('pool_id')
-             
-             const swapLog = outcome.logs[k];
-             const swapLogArray = swapLog.split(' ');
-             if(swapLog.startsWith('Admin')) return;
+              const swap = actionsParsed._arr[k];
+              const swapParsed: JSON.Obj = <JSON.Obj>JSON.parse(swap.toString());
+              const pool_id = swapParsed.getValue('pool_id')
+              
+              const swapLog = outcome.logs[k];
+              const swapLogArray = swapLog.split(' ');
+              if(swapLog.startsWith('Admin')) return;
 
-             log.debug("ft_on_transfer: {} ", [swapParsed.toString()]);
-             
-             if(pool_id == null) return;
-             log.debug("ft_on_transfer: pool_id {} ", [pool_id.toString()]);
+              log.debug("ft_on_transfer: {} ", [swapParsed.toString()]);
+              
+              if(pool_id == null) return;
+              log.debug("ft_on_transfer: pool_id {} ", [pool_id.toString()]);
 
-            if(swapLog == '') return;
+              if(swapLog == '') return;
       
-            saveSwap(
-              receiptId + ' ' + pool_id.toString(), 
-              swapLogArray[2], 
-              swapLogArray[5],
-              swapLogArray[1],
-              swapLogArray[4],
-              blockTimestamp,
-              pool_id.toString(),
-              receipt.signerId
-            )
-            account.swap = account.swap.concat([receiptId + ' ' + pool_id.toString()])
-            const blockTimestampI64: i64 = blockTimestamp.times(secondsToMilliseconds).toI64();
-            const date = new Date(blockTimestampI64);
-            date.setUTCMilliseconds(0);
-            date.setUTCSeconds(0);
-            date.setUTCMinutes(0);
-            const hourId = date.toISOString()
-            log.debug("AnHour id {}", [hourId]);
-            let anHour = AnHour.load(hourId);
+              saveSwap(
+                receiptId + ' ' + pool_id.toString(), 
+                swapLogArray[2], 
+                swapLogArray[5],
+                swapLogArray[1],
+                swapLogArray[4],
+                blockTimestamp,
+                pool_id.toString(),
+                receipt.signerId
+              )
+              account.swap = account.swap.concat([receiptId + ' ' + pool_id.toString()])
+              const blockTimestampI64: i64 = blockTimestamp.times(secondsToMilliseconds).toI64();
+              const date = new Date(blockTimestampI64);
+              date.setUTCMilliseconds(0);
+              date.setUTCSeconds(0);
+              date.setUTCMinutes(0);
+              const hourId = date.toISOString()
+              log.debug("AnHour id {}", [hourId]);
+              let anHour = AnHour.load(hourId);
 
-            if(!anHour) {
-              anHour = new AnHour(hourId)
-              anHour.blockTimestamp = blockTimestamp;
-              anHour.swapsForHour = [];
-            };
+              if(!anHour) {
+                anHour = new AnHour(hourId)
+                anHour.blockTimestamp = blockTimestamp;
+                anHour.swapsForHour = [];
+              };
 
-            anHour.swapsForHour =  anHour.swapsForHour.concat([receiptId + ' ' + pool_id.toString()]);
-            anHour.save()
+              anHour.swapsForHour =  anHour.swapsForHour.concat([receiptId + ' ' + pool_id.toString()]);
+              anHour.save();
            }
           };
         }
