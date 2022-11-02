@@ -1,5 +1,5 @@
 import { near, log, BigInt } from "@graphprotocol/graph-ts";
-import { Pool, Swap } from "../../generated/schema";
+import { Pool } from "../../generated/schema";
 import { replaceAllOccurrences } from "../utils/replacer";
 import { JSON } from "assemblyscript-json"; 
 
@@ -10,7 +10,7 @@ export default function pool(
   functionCall: near.FunctionCallAction,
   receipt: near.ActionReceipt,
   outcome: near.ExecutionOutcome,
-  type: String
+  type: string
 ): void {
     const receiptId = receipt.id.toHexString();
     const argumentsString = functionCall.args.toString()

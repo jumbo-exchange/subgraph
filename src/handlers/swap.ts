@@ -63,7 +63,7 @@ export default function swap(
                 receipt.signerId
               )
               account.swap = account.swap.concat([receiptId + ' ' + pool_id.toString()])
-              const blockTimestampI64: i64 = blockTimestamp.times(secondsToMilliseconds).toI64();
+              const blockTimestampI64 = blockTimestamp.times(secondsToMilliseconds).toI64();
               const date = new Date(blockTimestampI64);
               date.setUTCMilliseconds(0);
               date.setUTCSeconds(0);

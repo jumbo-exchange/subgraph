@@ -1,6 +1,7 @@
 import swap from './swap';
 import pool from './pool';
 import { log, near } from "@graphprotocol/graph-ts";
+import addLiquidity from './liquidity';
 
 
 export function handleEvent(  
@@ -29,6 +30,11 @@ export function handleEvent(
 
   if(functionCall.methodName =='add_stable_swap_pool') {
     pool(functionCall, receipt, outcome, "STABLE");
+    return;
+  }
+
+  if(functionCall.methodName =='add_liquidity' || functionCall.methodName =='add_stable_liquidity') {
+    addLiquidity(functionCall, receipt, blockHeader, outcome);
     return;
   }
 }

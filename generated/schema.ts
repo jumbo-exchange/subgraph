@@ -516,23 +516,6 @@ export class AddLiquidity extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get output(): string | null {
-    let value = this.get("output");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set output(value: string | null) {
-    if (!value) {
-      this.unset("output");
-    } else {
-      this.set("output", Value.fromString(<string>value));
-    }
-  }
-
   get receiptId(): string | null {
     let value = this.get("receiptId");
     if (!value || value.kind == ValueKind.NULL) {
@@ -567,40 +550,6 @@ export class AddLiquidity extends Entity {
     }
   }
 
-  get functionCalled(): string | null {
-    let value = this.get("functionCalled");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set functionCalled(value: string | null) {
-    if (!value) {
-      this.unset("functionCalled");
-    } else {
-      this.set("functionCalled", Value.fromString(<string>value));
-    }
-  }
-
-  get functionAction(): string | null {
-    let value = this.get("functionAction");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set functionAction(value: string | null) {
-    if (!value) {
-      this.unset("functionAction");
-    } else {
-      this.set("functionAction", Value.fromString(<string>value));
-    }
-  }
-
   get firstPoolAmount(): BigInt | null {
     let value = this.get("firstPoolAmount");
     if (!value || value.kind == ValueKind.NULL) {
@@ -615,23 +564,6 @@ export class AddLiquidity extends Entity {
       this.unset("firstPoolAmount");
     } else {
       this.set("firstPoolAmount", Value.fromBigInt(<BigInt>value));
-    }
-  }
-
-  get firstPool(): string | null {
-    let value = this.get("firstPool");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set firstPool(value: string | null) {
-    if (!value) {
-      this.unset("firstPool");
-    } else {
-      this.set("firstPool", Value.fromString(<string>value));
     }
   }
 
@@ -652,8 +584,8 @@ export class AddLiquidity extends Entity {
     }
   }
 
-  get secondPool(): string | null {
-    let value = this.get("secondPool");
+  get poolId(): string | null {
+    let value = this.get("poolId");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -661,28 +593,11 @@ export class AddLiquidity extends Entity {
     }
   }
 
-  set secondPool(value: string | null) {
+  set poolId(value: string | null) {
     if (!value) {
-      this.unset("secondPool");
+      this.unset("poolId");
     } else {
-      this.set("secondPool", Value.fromString(<string>value));
-    }
-  }
-
-  get sharesMinted(): BigInt | null {
-    let value = this.get("sharesMinted");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set sharesMinted(value: BigInt | null) {
-    if (!value) {
-      this.unset("sharesMinted");
-    } else {
-      this.set("sharesMinted", Value.fromBigInt(<BigInt>value));
+      this.set("poolId", Value.fromString(<string>value));
     }
   }
 }

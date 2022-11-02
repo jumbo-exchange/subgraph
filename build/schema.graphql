@@ -37,16 +37,11 @@ type Pool @entity {
 
 type AddLiquidity @entity {
   id: ID!
-  output: String
   receiptId: String
   blockTimestamp: BigInt
-  functionCalled: String
-  functionAction: String
   firstPoolAmount: BigInt
-  firstPool: String
   secondPoolAmount: BigInt
-  secondPool: String
-  sharesMinted: BigInt
+  poolId: String
 }
 
 type AnHour @entity { 
